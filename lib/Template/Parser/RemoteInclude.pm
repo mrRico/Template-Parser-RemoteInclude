@@ -46,8 +46,18 @@ However, this module allows you to make remote calls directly from the template.
 This is very useful when your project have a template server.
 
 The module allows you to make any http-requests.
+
+=over 4
+
+=item *
+
 L<Curl::Multi> faster than L<LWP>.
+
+=item *
+
 L<AnyEvent::Curl::Multi> much faster than L<LWP> ;)
+
+=back
 
 Use and enjoy!
 
