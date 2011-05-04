@@ -97,7 +97,7 @@ simple example include content C<http://ya.ru/> (with GET as http method)
 example include remote template
     
     # http://example.com/get/template/hello_world => 
-    # '<b>Hello, [% name %]!</b><br>[% name = "Boris" %]% RINCLUDE  "http://example.com/.../another" %]'
+    # '<b>Hello, [% name %]!</b><br>[% name = "Boris" %][% RINCLUDE  "http://example.com/.../another" %]'
     # and
     # http://example.com/.../another => 
     # '<b>And goodbye, [% name %]!</b>'
