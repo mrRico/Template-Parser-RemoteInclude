@@ -1,12 +1,30 @@
-use 5.010001;
-use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
-WriteMakefile(
-    NAME              => 'Template::Parser::RemoteInclude',
-    VERSION_FROM      => 'lib/Template/Parser/RemoteInclude.pm', # finds $VERSION
-    PREREQ_PM         => {}, # e.g., Module::Name => 1.1
-    ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
-      (ABSTRACT_FROM  => 'lib/Template/Parser/RemoteInclude.pm', # retrieve abstract from module
-       AUTHOR         => 'mrrico <mrrico@>') : ()),
+use strict;
+use warnings;
+
+use inc::Module::Install 0.91;
+
+use Module::Install::AuthorRequires;
+use Module::Install::CheckConflicts;
+use Module::Install::AuthorTests;
+
+perl_version '5.010001';
+
+name 'Template::Parser::RemoteInclude';
+all_from 'lib/Template/Parser/RemoteInclude.pm';
+
+requires 'namespace::autoclean'   => '0';
+requires 'AnyEvent'          => '0';
+requires 'AnyEvent::Curl::Multi'   => '1.1';
+requires 'Template'     => '0';
+requires 'HTTP::Request'   => '0';
+requires 'Scalar::Util'   => '0';
+requires 'Try::Tiny'   => '0';
+requires 'Sub::Install'   => '0';
+
+resources(
+    'license',    => 'http://dev.perl.org/licenses/',
+    'repository', => 'git@github.com:mrRico/Template-Parser-RemoteInclude.git',
 );
+
+auto_install;
+WriteAll;

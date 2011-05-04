@@ -1,6 +1,6 @@
 Changes
 Makefile.PL
 MANIFEST
-README
+README.pod
 t/Template-Parser-RemoteInclude.t
 lib/Template/Parser/RemoteInclude.pm
