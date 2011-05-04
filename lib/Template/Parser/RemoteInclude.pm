@@ -59,15 +59,11 @@ Use and enjoy!
 
 =item *
 
-Directive C<RINCLUDE> like C<PROCESS>, but call remote uri
+Directive C<RINCLUDE> like C<PROCESS>, but call remote uri.
 
 =item *
 
 Parser does not know anything about L<Template::Stash>, but knows about the variables passed in C<Template::process>.
-
-=item *
-
-Content response becomes part of the of your template
 
 =item *
 
@@ -124,13 +120,24 @@ simple example include content C<http://ya.ru/> (with GET as http method)
     
     # example 5 - use HTTP::Request (with POST as http method) passed in Template::process
     my $tmpl = "[% RINCLUDE http_req_1 %]";
-    $tt->process(\$tmpl,{http_req_1 => HTTP::Request->new(POST => 'http://ya.ru/', ['header1' => 'value1','header2' => 'value2'], $content)});
+    $tt->process(
+        \$tmpl,
+        {
+            http_req_1 => HTTP::Request->new(
+                                                POST => 'http://ya.ru/', 
+                                                ['header1' => 'value1','header2' => 'value2'], 
+                                                $content
+                                             )
+        }
+    );
 
 example include remote template
     
-    http://example.com/get/template/hello_world => '<b>Hello, [% name %]!</b><br>[% name = "Boris" %]% RINCLUDE  "http://example.com/.../another" %]'
-    and
-    http://example.com/.../another => '<b>And goodbye, [% name %]!</b>'
+    # http://example.com/get/template/hello_world => 
+    # '<b>Hello, [% name %]!</b><br>[% name = "Boris" %]% RINCLUDE  "http://example.com/.../another" %]'
+    # and
+    # http://example.com/.../another => 
+    # '<b>And goodbye, [% name %]!</b>'
     
     # example
     my $tmpl = "[% RINCLUDE GET 'http://example.com/get/template/hello_world' %]";
@@ -139,7 +146,7 @@ example include remote template
     # returned
     <b>Hello, User!</b><br><b>And goodbye, Boris!</b>
 
-more power!! more!
+more power example
     
     use Template;
     use Template::Parser::RemoteInclude;
@@ -169,7 +176,8 @@ more power!! more!
     #    [% content %]
     #    ====
     
-    #http://example.com/get/template/hello_world => "[% CSS.push('http://example.com/file.css') %]\nHello, [% name %]!\n"
+    # http://example.com/get/template/hello_world => 
+    # "[% CSS.push('http://example.com/file.css') %]\nHello, [% name %]!\n"
     
     my $tmpl = "[% SET CSS = [] %][% RINCLUDE GET 'http://example.com/get/template/hello_world' %]";
     $tt->process(\$tmpl,{name => 'User'});
