@@ -10,6 +10,7 @@ This is very useful when your project have a template server.
 
 The module allows you to make any http-requests.
 L<Curl::Multi> faster than L<LWP>.
+
 L<AnyEvent::Curl::Multi> much faster than L<LWP> ;)
 
 Use and enjoy!
