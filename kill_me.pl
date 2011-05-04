@@ -2,26 +2,28 @@
 use strict;
 use warnings;
 
-use lib '/home/mrrico/Project/Template-Parser-RemoteInclude/lib';
+use lib 'lib';
 
 use Template;
 use Template::Parser::RemoteInclude;
 
 
 my $tt = Template->new(
- #   PLUGINS => {lala => 'TemplateDumper'},
- #INCLUDE_PATH => '/home/mrrico'
- PARSER => Template::Parser::RemoteInclude->new({
-     max_concurrency => 10
- })
+ INCLUDE_PATH => '/home/mrrico',
+ PARSER => Template::Parser::RemoteInclude->new(
+     'Template::Parser' => {},
+     'AnyEvent::Curl::Multi' => {
+        max_concurrency => 10
+     }
+ )
 );
 
-#my $tmpl = '[% USE lala %][% lala.rr(\'DDDD\') %][% lala.start %]';
-my $tmpl = "
-    [% RINCLUDE 'http://ya.ru/' %]
-    [% RINCLUDE 'http://search.cpan.org/~abw/Template-Toolkit-2.22/lib/Template/Parser.pm' %]
-    [% RINCLUDE 'http://mailliste111.ru/' %]
-    ";
+my $tmpl = '[% INCLUDE dummy.tt2 %]';
+#my $tmpl = "
+#    [% RINCLUDE 'http://ya.ru/' %]
+#    [% RINCLUDE 'http://search.cpan.org/~abw/Template-Toolkit-2.22/lib/Template/Parser.pm' %]
+#    [% RINCLUDE 'http://mailliste111.ru/' %]
+#    ";
 #my $tmpl = '[% "blahh" %]';
 
 $tt->process(\$tmpl,{});
