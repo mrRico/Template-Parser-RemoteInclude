@@ -8,19 +8,11 @@ You can write your own html aggregator for block build pages.
 However, this module allows you to make remote calls directly from the template. 
 This is very useful when your project have a template server.
 
-The module allows you to make any http-requests.
+This module allows you to make any http-requests from template.
 
-=over 4
+Depends on L<Template::Parser> and L<AnyEvent::Curl::Multi>. 
 
-=item *
-
-L<Curl::Multi> faster than L<LWP>.
-
-=item *
-
-L<AnyEvent::Curl::Multi> much faster than L<LWP> ;)
-
-=back
+L<Curl::Multi> faster than L<LWP>. L<AnyEvent::Curl::Multi> much faster than L<LWP> ;)
 
 Use and enjoy!
 
