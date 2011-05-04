@@ -18,7 +18,7 @@ my $tt = Template->new(
  )
 );
 
-my $tmpl = '[% INCLUDE dummy.tt2 %]';
+my $tmpl = '[% INCLUDE dummy.tt2 %][% RINCLUDE \'http://ya.ru/\' %]';
 #my $tmpl = "
 #    [% RINCLUDE 'http://ya.ru/' %]
 #    [% RINCLUDE 'http://search.cpan.org/~abw/Template-Toolkit-2.22/lib/Template/Parser.pm' %]

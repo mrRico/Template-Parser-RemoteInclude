@@ -5,6 +5,7 @@ use warnings;
 
 our $VERSION = '0.01';
 
+use namespace::autoclean;
 use AnyEvent;
 use AnyEvent::Curl::Multi;
 use HTTP::Request;
@@ -63,8 +64,10 @@ sub _parse {
     my $ids_rinclude = {};
     # наполним хэш: ссылка в памяти -> объект запроса
     my %requests = map {
-        $self->debug("found RINCLUDE for url: ".$tokens->[$_]->[2]->[3]) if $self->{ DEBUG };
-        my $req = HTTP::Request->new(GET => eval($tokens->[$_]->[2]->[3]));
+        (my $url = $tokens->[$_]->[2]->[3]) =~ /^(['"])/;
+        $url =~ s/(^$1|$1$)//g if $1;
+        $self->debug("found RINCLUDE for url: $url") if $self->{ DEBUG };
+        my $req = HTTP::Request->new(GET => $url);
         my $addr = refaddr($req);
         $ids_rinclude->{$_} = $addr;  
         ($addr => $req); 
@@ -77,7 +80,8 @@ sub _parse {
     $self->{aecm}->reg_cb(response => sub {
         my ($client, $request, $response, $stats) = @_;
         #$requests{refaddr($request)} = $response->content;
-        $requests{refaddr($request)} = join '', $request->uri,'   ',$response->status_line;
+        #$requests{refaddr($request)} = join '', $request->uri,'   ',$response->status_line;
+        $requests{refaddr($request)} = $request->uri =~ /ya\.ru/ ? '[% SET eb = 12 %]Blahh! [% eb %]'."\n[% RINCLUDE 'http://search.cpan.org/~abw/Template-Toolkit-2.22/lib/Template/Parser.pm' %]\n" : join '', $request->uri,'   ',$response->status_line;
     });
       
     $self->{aecm}->reg_cb(error => sub {
@@ -88,7 +92,7 @@ sub _parse {
     });
     
     # поднимаем событие обхода для Curl::Multi
-    $self->{timer_w} = AE::timer(0, 0, sub { $self->{aecm}->_perform });
+    $self->{timer_w} = AE::timer(0, 0, sub { $self->{aecm}->_perform }) if (@handler_cm and not $self->{timer_w});
     
     # погнали (see AnyEvent::Curl::Multi)
     for my $crawler (@handler_cm) {
@@ -103,16 +107,25 @@ sub _parse {
     
     return if $self->{ _ERROR };
     
-    # replace tokens RINCLUDE to simple value
-    for (@ids_rinclude) {
-        $tokens->[$_] = [
-           "'".$ids_rinclude->{$_}."'", # unic name - addr
-           1,
-           $self->split_text($requests{$ids_rinclude->{$_}})
-        ];
-    }
+#    # replace tokens RINCLUDE to simple value
+#    for (@ids_rinclude) {
+#        $tokens->[$_] = [
+#           "'".$ids_rinclude->{$_}."'", # unic name - addr
+#           1,
+#           $self->split_text($requests{$ids_rinclude->{$_}})
+#        ];
+#    }
 
-    return $self->SUPER::_parse($tokens, $info);
+    # extend tokens RINCLUDE to new array values from request
+    for (@ids_rinclude) {
+        my $parse_upload = $self->split_text($requests{$ids_rinclude->{$_}});
+        my $added_len = $#$parse_upload;
+        splice(@$tokens, $_, 1, @$parse_upload); 
+        $_ += $added_len for @ids_rinclude;
+    }
+    
+    # методично, как тузик тряпку, продожаем обработку токенов, пока не исчерпаем все RINCLUDE, если они пришли в контенте ответов
+    return @ids_rinclude ? $self->_parse($tokens, $info) : $self->SUPER::_parse($tokens, $info);
 }
 
 
