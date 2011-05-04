@@ -9,7 +9,7 @@ use Module::Install::AuthorTests;
 
 perl_version '5.010001';
 
-name 'Template::Parser::RemoteInclude';
+name 'TemplateParserRemoteInclude';
 all_from 'lib/Template/Parser/RemoteInclude.pm';
 
 requires 'namespace::autoclean'   => '0';
@@ -22,8 +22,8 @@ requires 'Try::Tiny'   => '0';
 requires 'Sub::Install'   => '0';
 
 resources(
-    'license',    => 'http://dev.perl.org/licenses/',
-    'repository', => 'git@github.com:mrRico/Template-Parser-RemoteInclude.git',
+    'license'    => 'http://dev.perl.org/licenses/',
+    'repository' => 'git@github.com:mrRico/Template-Parser-RemoteInclude.git',
 );
 
 auto_install;

@@ -12,7 +12,7 @@ license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
-name: Template::Parser::RemoteInclude
+name: 'Template::Parser::RemoteInclude'
 no_index:
   directory:
     - inc
@@ -28,6 +28,6 @@ requires:
   Sub::Install: 0
   perl: 5.10
 resources:
-  license: http://dev.perl.org/licenses/
-  repository: git@github.com:mrRico/Template-Parser-RemoteInclude.git
+  license: 'http://dev.perl.org/licenses/'
+  repository: 'git@github.com:mrRico/Template-Parser-RemoteInclude.git'
 version: 5.010001
