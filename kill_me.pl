@@ -15,18 +15,30 @@ my $tt = Template->new(
      'AnyEvent::Curl::Multi' => {
         max_concurrency => 10
      }
- )
+ ),
+ WRAPPER => 'dummy.tt2'
+ 
 );
 
-my $tmpl = '[% INCLUDE dummy.tt2 %][% RINCLUDE \'http://ya.ru/\' %]';
-#my $tmpl = "
+#my $tmpl = '[% INCLUDE dummy.tt2 %][% RINCLUDE \'http://ya.ru/\' %][% SET foo = 34 %]';
+#my $tmpl1 = "
 #    [% RINCLUDE 'http://ya.ru/' %]
 #    [% RINCLUDE 'http://search.cpan.org/~abw/Template-Toolkit-2.22/lib/Template/Parser.pm' %]
 #    [% RINCLUDE 'http://mailliste111.ru/' %]
 #    ";
-#my $tmpl = '[% "blahh" %]';
+#my $tmpl2 = "[% 'blahh' %]\nNOOOO [% foo %]";
+#my $tmpl3 = "[% RINCLUDE GET \'http://ya.ru/\'    ['head1' => 'val1', 'head2' => 'val2']    'come content' %]";
+my $tmpl3 = "[% SET CSS = [] %][% RINCLUDE url %]";
 
-$tt->process(\$tmpl,{});
+#print "88888888888888\n";
+#$tt->process(\$tmpl,{});
+#print "88888888888888\n";
+#$tt->process(\$tmpl1,{});
+#print "88888888888888\n";
+#$tt->process(\$tmpl2,{});
+#print "88888888888888\n";
+$tt->process(\$tmpl3,{url => HTTP::Request->new(GET => 'http://ya.ru/'), name => 'User'});
+
 
 
 #  use AnyEvent; # not AE
